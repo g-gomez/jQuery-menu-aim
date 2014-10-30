@@ -95,7 +95,8 @@
                 exit: $.noop,
                 activate: $.noop,
                 deactivate: $.noop,
-                exitMenu: $.noop
+                exitMenu: $.noop,
+                firstActivationDelay: 300
             }, opts);
 
         var MOUSE_LOCS_TRACKED = 3,  // number of past mouse locations to track
@@ -178,7 +179,11 @@
         var possiblyActivate = function(row) {
                 var delay = activationDelay();
 
-                if (delay) {
+                if (!activeRow) {
+                    timeoutId = setTimeout(function() {
+                        activate(row);
+                    }, options.firstActivationDelay);
+                } else if (delay) {
                     timeoutId = setTimeout(function() {
                         possiblyActivate(row);
                     }, delay);
